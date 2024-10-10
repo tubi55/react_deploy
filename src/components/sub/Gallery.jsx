@@ -13,7 +13,7 @@ export default function Gallery() {
 	const customMotion = {
 		init: { opacity: 0, x: 200 },
 		active: { opacity: 1, x: 0 },
-		end: { opacity: 0, x: -200 }
+		end: { opacity: 0, x: -200, transition: { delay: 0 } }
 	};
 
 	useEffect(() => {
