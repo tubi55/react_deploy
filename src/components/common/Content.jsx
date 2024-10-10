@@ -14,7 +14,7 @@ export default function Content({ children, duration = 1, delay = 0, customMotio
 	const combined = { ...defaultMotion, ...customMotion };
 
 	//우항에서 기존 합쳐진 combined객체를 다시 deep copy처리한 뒤에 end프로퍼티에 delay값을 0으로 초기화하는 하위 프로퍼티만 다시 덮어씀
-	//최종적으로 변경된 객체값에서 비구조활당 처리
+	//최종적으로 변경된 객체값에서 비구조화 할당 처리
 	const { init, active, end } = { ...combined, end: { ...combined.end, transition: { delay: 0 } } };
 	console.log(end);
 
