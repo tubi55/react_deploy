@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
 	const { kakao } = window;
-	let ref_mapFrame = useRef(null);
+	const ref_mapFrame = useRef(null);
 	const [Index, setIndex] = useState(0);
 
 	//지도 인스턴스가 담길 빈 참조객체 생성
 	const ref_instMap = useRef(null);
 
 	//지도 정보 배열 참조객체 등록 및 비구조화할당으로 개별 정보 추출
-	const ref_info = useRef([
+	const { current: ref_info } = useRef([
 		{
 			title: 'COEX',
 			latlng: new kakao.maps.LatLng(37.5094091584729, 127.0624304750884),
@@ -32,7 +32,7 @@ export default function Map() {
 			markerPos: { offset: new kakao.maps.Point(116, 99) }
 		}
 	]);
-	const { latlng, markerImg, markerSize, markerPos } = ref_info.current[Index];
+	const { latlng, markerImg, markerSize, markerPos } = ref_info[Index];
 
 	//마커 인스턴스 생성
 	const inst_marker = new kakao.maps.Marker({
@@ -52,9 +52,6 @@ export default function Map() {
 		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(ref_instMap.current);
 
-		//모든 이벤트문은 무조건 useEffect안쪽에 호출되야함
-		//이유: webAPI기능을 활용하는 모든 구문들은 useEffect안쪽에서 실행됨
-		//window객체에 이벤트 연결 (리사이즈마다 지도 가운데 위치 초기화 함수 호출)
 		window.addEventListener('resize', initPos);
 	}, [Index]);
 
@@ -66,7 +63,7 @@ export default function Map() {
 
 			<nav className='btnSet'>
 				<ul className='branch'>
-					{ref_info.current.map((el, idx) => (
+					{ref_info.map((el, idx) => (
 						<li key={idx} className={idx === Index ? 'on' : ''} onClick={() => setIndex(idx)}>
 							{el.title}
 						</li>
