@@ -8,7 +8,7 @@ export default function Map() {
 	const [Traffic, setTraffic] = useState(false);
 	const [Roadview, setRoadview] = useState(false);
 
-	//지점정보가 담긴 참조객체를 생성하고 비구조화할당으로 현재 활성화된 Index순번의 데이터 비구조화할당
+	//지점정보가 담긴 참조객체를 생성하고 현재 활성화된 Index순번의 데이터 추출
 	const ref_info = useRef([
 		{
 			title: 'COEX',
@@ -34,21 +34,16 @@ export default function Map() {
 	]);
 	const { latlng, markerImg, markerSize, markerPos } = ref_info.current[Index];
 
-	//순수함수 형태로 값을 바로 반환할 수 있는 인스턴스값 참조객체에 담음
+	//순수함수 형태로 값을 바로 전달받을 수 있는 인스턴스값 참조객체에 담음
 	const ref_instClient = useRef(new kakao.maps.RoadviewClient());
 	const ref_instType = useRef(new kakao.maps.MapTypeControl());
 	const ref_instZoom = useRef(new kakao.maps.ZoomControl());
-	const ref_instMarker = useRef(
-		new kakao.maps.Marker({
-			position: latlng,
-			image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
-		})
-	);
 
-	//컴포넌트 마운트시에만 전달받을 수 있는 값이 담길 빈 참조객체 생성
+	//컴포넌트 마운트시에만 전달받을 수 있는 빈 참조객체 생성
 	const ref_mapFrame = useRef(null);
 	const ref_viewFrame = useRef(null);
 	const ref_instMap = useRef(null);
+	const ref_instMarker = useRef(null);
 	const ref_instView = useRef(null);
 
 	//리사이즈 이벤트에 연결될 화면위치 초기화 함수
@@ -56,15 +51,19 @@ export default function Map() {
 
 	//Index값이 변경될때마다 지도초기화, 뷰,마커, 로드뷰인스턴스 생성 및 리사이즈 이벤트연결
 	useEffect(() => {
-		//지도 프레임, 트래픽정보, 컨트롤러 정보 초기화 함수 호출
 		ref_mapFrame.current.innerHTML = '';
-		[setTraffic, setRoadview].forEach(func => func(false));
-		[ref_instType.current, ref_instZoom.current].forEach(inst => ref_instMap.current.addControl(inst));
 
 		//맵, 마커, 로드뷰, 로드뷰 인스턴스 생성후 미리 생성한 참조객체에 옮겨담음
 		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
-		ref_instMarker.current.setMap(ref_instMap.current);
+		ref_instMarker.current = new kakao.maps.Marker({ position: latlng, image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos) });
 		ref_instView.current = new kakao.maps.Roadview(ref_viewFrame.current);
+
+		//마커 인스턴스에 지도 인스턴스 바인딩해서 지도에 마커 출력
+		ref_instMarker.current.setMap(ref_instMap.current);
+
+		//교통정보, 로드뷰 토글 상태 변경함수 반복호출해서 초기화 및 컨트롤러 반복호출하여 초기화
+		[setTraffic, setRoadview].forEach(func => func(false));
+		[ref_instType.current, ref_instZoom.current].forEach(inst => ref_instMap.current.addControl(inst));
 
 		//로드뷰 인스턴스에 panoId연결해 실제 로드뷰화면 출력하는 호출문
 		ref_instClient.current.getNearestPanoId(latlng, 50, panoId => ref_instView.current.setPanoId(panoId, latlng));
@@ -76,9 +75,7 @@ export default function Map() {
 
 	//Traffic 값이 반전될때마다 트레픽 레이어 토글
 	useEffect(() => {
-		Traffic
-			? ref_instMap.current.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
-			: ref_instMap.current.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
+		Traffic ? ref_instMap.current.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC) : ref_instMap.current.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
 	}, [Traffic]);
 
 	return (
@@ -113,3 +110,5 @@ export default function Map() {
 		</section>
 	);
 }
+
+//미션 - 5시 40분까지 위의 분류된 카테고리 항목별로 코드 기능 분석 및 정리
