@@ -9,7 +9,7 @@ export default function Map() {
 	const ref_instMap = useRef(null);
 
 	//지도 정보 배열 참조객체 등록 및 비구조화할당으로 개별 정보 추출
-	const { current: ref_info } = useRef([
+	const ref_info = useRef([
 		{
 			title: 'COEX',
 			latlng: new kakao.maps.LatLng(37.5094091584729, 127.0624304750884),
