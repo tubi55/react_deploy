@@ -4,11 +4,7 @@ export default function Map() {
 	const { kakao } = window;
 	const ref_mapFrame = useRef(null);
 	const [Index, setIndex] = useState(0);
-
-	//지도 인스턴스가 담길 빈 참조객체 생성
 	const ref_instMap = useRef(null);
-
-	//지도 정보 배열 참조객체 등록 및 비구조화할당으로 개별 정보 추출
 	const ref_info = useRef([
 		{
 			title: 'COEX',
@@ -34,26 +30,34 @@ export default function Map() {
 	]);
 	const { latlng, markerImg, markerSize, markerPos } = ref_info.current[Index];
 
-	//마커 인스턴스 생성
 	const inst_marker = new kakao.maps.Marker({
 		position: latlng,
 		image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
 	});
 
-	//지도 위치 중앙으로 초기화 함수
 	const initPos = () => {
-		console.log('initPost called!!');
+		console.log('initPos called!!');
 		ref_instMap.current.setCenter(latlng);
 	};
 
-	//Index상태값 변경시마다 새로운 지도 인스턴스 반환으로 화면 갱신
+	//Index값이 변경될때마다 실행할 useEffect (새로운 Index값으로 지도 인스턴스 갱신)
 	useEffect(() => {
 		ref_mapFrame.current.innerHTML = '';
 		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(ref_instMap.current);
-
-		window.addEventListener('resize', initPos);
 	}, [Index]);
+
+	//컴포넌트 언마운트시 한번만 윈도우 이벤트 제거하기 위해 의존성 배열이 비어있는 useEffect 이벤트 연결
+	useEffect(() => {
+		window.addEventListener('resize', initPos);
+		//clean up 함수 - 컴포넌트 언마운트 한번만 호출
+		return () => {
+			//window객체에 이벤트 핸들러 연결시에는 설사 해당 컴포넌트가 언마운트되더라도 계속해서 윈도우 전역객체에 등록되어 있음
+			///해결 방법 : clean-up함수를 활용해서 컴포넌트 언마운트시 강제로 window객체에 연결한 핸들러함수를 직접 제거
+			console.log('Map Unmounted!! initPos handler removed');
+			window.removeEventListener('resize', initPos);
+		};
+	}, []);
 
 	return (
 		<section className='map'>
