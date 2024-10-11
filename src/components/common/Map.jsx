@@ -1,4 +1,3 @@
-import { li } from 'framer-motion/client';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
@@ -67,3 +66,10 @@ export default function Map() {
 		</section>
 	);
 }
+
+/*
+  미션 
+  - 현재 화면에서 발생하고 있는 문제점 2개 찾기
+  - 리액트버전에서 어떻게 해결할 지 고민
+  - 점심 먹고 심심한 분들은 위의 내용 고민
+*/
