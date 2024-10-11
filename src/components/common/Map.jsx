@@ -35,28 +35,28 @@ export default function Map() {
 		image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
 	});
 
+	//타입컨트롤, 줌컨트롤 인스턴스 생성
+	const instType = new kakao.maps.MapTypeControl();
+	const instZoom = new kakao.maps.ZoomControl();
+
 	const initPos = () => {
 		console.log('initPos called!!');
 		ref_instMap.current.setCenter(latlng);
 	};
 
-	//Index값이 변경될때마다 실행할 useEffect (새로운 Index값으로 지도 인스턴스 갱신)
 	useEffect(() => {
 		ref_mapFrame.current.innerHTML = '';
 		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(ref_instMap.current);
+
+		//타입,줌 컨트롤러 인스턴스 반복돌며 맵 인스턴스 위에 바인딩
+		//Index가 변경될때마다 새로운 지도 인스턴스가 생성되므로 생성된 인스턴스 위에 컨트롤러를 바인딩하기 위해 해당 useEffect안쪽에서 호출
+		[instType, instZoom].forEach(inst => ref_instMap.current.addControl(inst));
 	}, [Index]);
 
-	//컴포넌트 언마운트시 한번만 윈도우 이벤트 제거하기 위해 의존성 배열이 비어있는 useEffect 이벤트 연결
 	useEffect(() => {
 		window.addEventListener('resize', initPos);
-		//clean up 함수 - 컴포넌트 언마운트 한번만 호출
-		return () => {
-			//window객체에 이벤트 핸들러 연결시에는 설사 해당 컴포넌트가 언마운트되더라도 계속해서 윈도우 전역객체에 등록되어 있음
-			///해결 방법 : clean-up함수를 활용해서 컴포넌트 언마운트시 강제로 window객체에 연결한 핸들러함수를 직접 제거
-			console.log('Map Unmounted!! initPos handler removed');
-			window.removeEventListener('resize', initPos);
-		};
+		return () => window.removeEventListener('resize', initPos);
 	}, []);
 
 	return (
@@ -77,3 +77,7 @@ export default function Map() {
 		</section>
 	);
 }
+/*
+  미션 (2시 45분까지)
+  - 지도에 컨트롤 올리기 샘플 가이드 문서를 통해 리액트 구조에 맞게 적용
+*/
