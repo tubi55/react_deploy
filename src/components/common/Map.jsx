@@ -1,33 +1,46 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
 	const { kakao } = window;
 	const ref_mapFrame = useRef(null);
+	//지점 정보를 변경하기 위한 데이터 순번을 state에 저장
+	//이후 인스턴스 호출하는 구문에 일괄적으로 Index값 연동
+	const [Index, setIndex] = useState(0);
 
-	// 각 지도를 출력하기 위한 정보값의 구조가 복잡하고 자주 변경되지 않는 데이터일때에는 일반 지역변수보다 useRef를 통한 참조객체 등록
-	// 참조객체는 state변경에 의해서 컴포넌트 재랜더링 되더라도 메모리가 해제되지 않고 해당 값이 계속 유지됨 (closure 개념 언급)
 	const ref_info = useRef([
 		{
-			title: 'COEX', //데이터 구분을 위한 타이틀
-			latlng: new kakao.maps.LatLng(37.5094091584729, 127.0624304750884), //위도,경도를 활용한 위치 인스턴스
-			markerImg: 'marker1.png', //마커이미지 경로
-			markerSize: new kakao.maps.Size(232, 99), //마커사이즈 인스턴스
-			markerOffset: { offset: new kakao.maps.Point(0, 0) } //마커 위치값 인스턴스
+			title: 'COEX',
+			latlng: new kakao.maps.LatLng(37.5094091584729, 127.0624304750884),
+			markerImg: 'marker1.png',
+			markerSize: new kakao.maps.Size(232, 99),
+			markerOffset: { offset: new kakao.maps.Point(116, 99) }
+		},
+		{
+			title: 'NEXON',
+			latlng: new kakao.maps.LatLng(37.40211707077346, 127.10344953763003),
+			markerImg: 'marker2.png',
+			markerSize: new kakao.maps.Size(232, 99),
+			markerPos: { offset: new kakao.maps.Point(116, 99) }
+		},
+		{
+			title: 'CITYHALL',
+			latlng: new kakao.maps.LatLng(37.5662952, 126.9779451),
+			markerImg: 'marker3.png',
+			markerSize: new kakao.maps.Size(232, 99),
+			markerPos: { offset: new kakao.maps.Point(116, 99) }
 		}
 	]);
 
-	// 마커이미지 인스턴스 생성
 	const inst_markerImg = new kakao.maps.MarkerImage(
-		ref_info.current[0].markerImg,
-		ref_info.current[0].markerSize,
-		ref_info.current[0].markerOffset
+		ref_info.current[Index].markerImg,
+		ref_info.current[Index].markerSize,
+		ref_info.current[Index].markerOffset
 	);
 
-	// 마커 인스턴스 생성시 전달되는 인수의 객체에 두번째 프로퍼티로 이미지 인스턴스 연결 (이미지가 적용된 마커 생성)
-	const inst_marker = new kakao.maps.Marker({ position: ref_info.current[0].latlng, image: inst_markerImg });
+	const inst_marker = new kakao.maps.Marker({ position: ref_info.current[Index].latlng, image: inst_markerImg });
 
 	useEffect(() => {
-		const inst_map = new kakao.maps.Map(ref_mapFrame.current, { center: ref_info.current[0].latlng });
+		const inst_map = new kakao.maps.Map(ref_mapFrame.current, { center: ref_info.current[Index].latlng });
 		inst_marker.setMap(inst_map);
 	}, []);
 
