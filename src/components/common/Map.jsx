@@ -5,7 +5,7 @@ export default function Map() {
 	let ref_mapFrame = useRef(null);
 	const [Index, setIndex] = useState(0);
 
-	// 각 지점 정보를 참조객체로 관리
+	//지도 정보 배열 참조객체 등록 및 비구조화할당으로 개별 정보 추출
 	const ref_info = useRef([
 		{
 			title: 'COEX',
@@ -29,23 +29,16 @@ export default function Map() {
 			markerPos: { offset: new kakao.maps.Point(116, 99) }
 		}
 	]);
-
-	//기존 참조객체명까지 매번 호출하기 번거로우므로 비구조화당을 통해 현재 Index순선 상태변화에 따라 활성화되고 있는 객체의 key값을 바로 추출
 	const { latlng, markerImg, markerSize, markerPos } = ref_info.current[Index];
 
-	//위의 비구조화할당으로 추출한 정보값으로 마커 인스턴스 생성
+	//마커 인스턴스 생성
 	const inst_marker = new kakao.maps.Marker({
 		position: latlng,
 		image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
 	});
 
-	//Index상태값이 변경될때마다 변경된 순번 상태값으로 지도 인스턴스 다시 생성해서 화면 갱신
-	//이슈사항1 - 지점버튼 클릭시하마다 Index상태값이 의존성배열로 등록되어 있는 useEffect 콜백함수를 재호출
-	//해당 콜백이 호출될떄마다 내부적으로 새로운 지도 인스턴스가 생성됨
-	//리액트는 (SPA:단일페이지 어플리케이션) 특성상 index.html은 그대로 있고 리액트 컴포넌트 함수만 재호출되는 구조
-	//useEffect의 콜백함수가 재호출될때마다 기존 생성된 지도 인스턴스를 삭제하지 않고 계속해서 추가가됨 (mapFrame안쪽에 지도 div가 계속 중첩됨)
+	//Index상태값 변경시마다 새로운 지도 인스턴스 반환으로 화면 갱신
 	useEffect(() => {
-		//강제로 참조된 지도영역안쪽의 html요소들을 계속 초기화처리 (지도 레이어 중첩 문제 해결)
 		ref_mapFrame.current.innerHTML = '';
 		const inst_map = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(inst_map);
@@ -60,9 +53,7 @@ export default function Map() {
 			<nav className='btnSet'>
 				<ul className='branch'>
 					{ref_info.current.map((el, idx) => (
-						//동적으로 li생성 : 클릭한 li의 순서값 idx로 Index 상태값 변경
-						// -> 컴포넌트 재랜더링되면서 변경된 순번의 정보값으로 지도화면 갱신됨
-						<li key={idx} onClick={() => setIndex(idx)}>
+						<li key={idx} className={idx === Index ? 'on' : ''} onClick={() => setIndex(idx)}>
 							{el.title}
 						</li>
 					))}
