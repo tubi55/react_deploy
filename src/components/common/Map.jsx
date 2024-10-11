@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
 	const { kakao } = window;
-	const ref_mapFrame = useRef(null);
 	const [Index, setIndex] = useState(0);
+	//Traffic 레이어 활성/비활성 토글하기 위한 state생성
+	const [Traffic, setTraffic] = useState(false);
+
+	const ref_mapFrame = useRef(null);
 	const ref_instMap = useRef(null);
 	const ref_info = useRef([
 		{
@@ -44,6 +47,8 @@ export default function Map() {
 	};
 
 	useEffect(() => {
+		//Index 상태값 변경시 (지점 버튼 클릭해서 지도화면 갱신시) 무조건 트래픽 레이어 제거
+		setTraffic(false);
 		ref_mapFrame.current.innerHTML = '';
 		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(ref_instMap.current);
@@ -52,6 +57,13 @@ export default function Map() {
 		window.addEventListener('resize', initPos);
 		return () => window.removeEventListener('resize', initPos);
 	}, [Index]);
+
+	//Traffic 상태값에 boolean값을 담아주고 해당 상태가 변경될때마다 지도 레이어 ON/OFF메서드 호출
+	useEffect(() => {
+		Traffic
+			? ref_instMap.current.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
+			: ref_instMap.current.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
+	}, [Traffic]);
 
 	return (
 		<section className='map'>
@@ -69,7 +81,10 @@ export default function Map() {
 				</ul>
 
 				<ul className='btnToggleSet'>
-					<li>Traffic</li>
+					{/* 버튼 클릭시 상태변경함수로 Traffic상태값 반전 및 3항 연산자로 버튼 활성/비활성화 처리 */}
+					<li onClick={() => setTraffic(!Traffic)} className={Traffic ? 'on' : ''}>
+						{`Traffic ${Traffic ? 'OFF' : 'ON'}`}
+					</li>
 					<li>Roadview</li>
 				</ul>
 			</nav>
