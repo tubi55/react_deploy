@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
 	const { kakao } = window;
-	const ref_mapFrame = useRef(null);
+	let ref_mapFrame = useRef(null);
 	const [Index, setIndex] = useState(0);
 
 	// 각 지점 정보를 참조객체로 관리
@@ -39,7 +39,6 @@ export default function Map() {
 		image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
 	});
 
-	//컴포넌트 마운트시 한번만 지도인스턴스 생성 및 마커 인스턴스 바인딩
 	//Index상태값이 변경될때마다 변경된 순번 상태값으로 지도 인스턴스 다시 생성해서 화면 갱신
 	useEffect(() => {
 		const inst_map = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
@@ -66,10 +65,3 @@ export default function Map() {
 		</section>
 	);
 }
-
-/*
-  미션 
-  - 현재 화면에서 발생하고 있는 문제점 2개 찾기
-  - 리액트버전에서 어떻게 해결할 지 고민
-  - 점심 먹고 심심한 분들은 위의 내용 고민
-*/
