@@ -40,7 +40,13 @@ export default function Map() {
 	});
 
 	//Index상태값이 변경될때마다 변경된 순번 상태값으로 지도 인스턴스 다시 생성해서 화면 갱신
+	//이슈사항1 - 지점버튼 클릭시하마다 Index상태값이 의존성배열로 등록되어 있는 useEffect 콜백함수를 재호출
+	//해당 콜백이 호출될떄마다 내부적으로 새로운 지도 인스턴스가 생성됨
+	//리액트는 (SPA:단일페이지 어플리케이션) 특성상 index.html은 그대로 있고 리액트 컴포넌트 함수만 재호출되는 구조
+	//useEffect의 콜백함수가 재호출될때마다 기존 생성된 지도 인스턴스를 삭제하지 않고 계속해서 추가가됨 (mapFrame안쪽에 지도 div가 계속 중첩됨)
 	useEffect(() => {
+		//강제로 참조된 지도영역안쪽의 html요소들을 계속 초기화처리 (지도 레이어 중첩 문제 해결)
+		ref_mapFrame.current.innerHTML = '';
 		const inst_map = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(inst_map);
 	}, [Index]);
