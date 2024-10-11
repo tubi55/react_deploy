@@ -32,7 +32,7 @@ export default function Map() {
 			markerPos: { offset: new kakao.maps.Point(116, 99) }
 		}
 	]);
-	const { latlng, markerImg, markerSize, markerPos } = ref_info[Index];
+	const { latlng, markerImg, markerSize, markerPos } = ref_info.current[Index];
 
 	//마커 인스턴스 생성
 	const inst_marker = new kakao.maps.Marker({
@@ -63,7 +63,7 @@ export default function Map() {
 
 			<nav className='btnSet'>
 				<ul className='branch'>
-					{ref_info.map((el, idx) => (
+					{ref_info.current.map((el, idx) => (
 						<li key={idx} className={idx === Index ? 'on' : ''} onClick={() => setIndex(idx)}>
 							{el.title}
 						</li>
