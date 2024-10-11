@@ -18,9 +18,11 @@
 	.btnSet {
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: space-between;
 		margin-top: 30px;
 
-		.branch {
+		.branch,
+		.btnToggleSet {
 			display: flex;
 			gap: 10px;
 
