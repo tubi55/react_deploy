@@ -1,3 +1,4 @@
+import { li } from 'framer-motion/client';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
@@ -40,16 +41,29 @@ export default function Map() {
 	});
 
 	//컴포넌트 마운트시 한번만 지도인스턴스 생성 및 마커 인스턴스 바인딩
+	//Index상태값이 변경될때마다 변경된 순번 상태값으로 지도 인스턴스 다시 생성해서 화면 갱신
 	useEffect(() => {
 		const inst_map = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
 		inst_marker.setMap(inst_map);
-	}, []);
+	}, [Index]);
 
 	return (
 		<section className='map'>
 			<h2>Location</h2>
 
 			<figure ref={ref_mapFrame} className='mapFrame'></figure>
+
+			<nav className='btnSet'>
+				<ul className='branch'>
+					{ref_info.current.map((el, idx) => (
+						//동적으로 li생성 : 클릭한 li의 순서값 idx로 Index 상태값 변경
+						// -> 컴포넌트 재랜더링되면서 변경된 순번의 정보값으로 지도화면 갱신됨
+						<li key={idx} onClick={() => setIndex(idx)}>
+							{el.title}
+						</li>
+					))}
+				</ul>
+			</nav>
 		</section>
 	);
 }
