@@ -2,19 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Map() {
 	const { kakao } = window;
+
+	//화면 렌더링에 필요한 state값 초기화
 	const [Index, setIndex] = useState(0);
 	const [Traffic, setTraffic] = useState(false);
 	const [Roadview, setRoadview] = useState(false);
 
-	const ref_mapFrame = useRef(null);
-	const ref_viewFrame = useRef(null);
-	const ref_instMap = useRef(null);
-	const ref_instView = useRef(null);
-	const ref_instClient = useRef(new kakao.maps.RoadviewClient());
-	//통일성을 주기위해 타입,줌 컨트롤 인스턴스도 참조객체에 담음
-	const ref_instType = useRef(new kakao.maps.MapTypeControl());
-	const ref_instZoom = useRef(new kakao.maps.ZoomControl());
-
+	//지점정보가 담긴 참조객체를 생성하고 비구조화할당으로 현재 활성화된 Index순번의 데이터 비구조화할당
 	const ref_info = useRef([
 		{
 			title: 'COEX',
@@ -40,30 +34,47 @@ export default function Map() {
 	]);
 	const { latlng, markerImg, markerSize, markerPos } = ref_info.current[Index];
 
-	const inst_marker = new kakao.maps.Marker({
-		position: latlng,
-		image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
-	});
+	//순수함수 형태로 값을 바로 반환할 수 있는 인스턴스값 참조객체에 담음
+	const ref_instClient = useRef(new kakao.maps.RoadviewClient());
+	const ref_instType = useRef(new kakao.maps.MapTypeControl());
+	const ref_instZoom = useRef(new kakao.maps.ZoomControl());
+	const ref_instMarker = useRef(
+		new kakao.maps.Marker({
+			position: latlng,
+			image: new kakao.maps.MarkerImage(markerImg, markerSize, markerPos)
+		})
+	);
 
-	const initPos = () => {
-		console.log('initPos called!!');
-		ref_instMap.current.setCenter(latlng);
-	};
+	//컴포넌트 마운트시에만 전달받을 수 있는 값이 담길 빈 참조객체 생성
+	const ref_mapFrame = useRef(null);
+	const ref_viewFrame = useRef(null);
+	const ref_instMap = useRef(null);
+	const ref_instView = useRef(null);
 
+	//리사이즈 이벤트에 연결될 화면위치 초기화 함수
+	const initPos = () => ref_instMap.current.setCenter(latlng);
+
+	//Index값이 변경될때마다 지도초기화, 뷰,마커, 로드뷰인스턴스 생성 및 리사이즈 이벤트연결
 	useEffect(() => {
-		[setTraffic, setRoadview].forEach(func => func(false));
+		//지도 프레임, 트래픽정보, 컨트롤러 정보 초기화 함수 호출
 		ref_mapFrame.current.innerHTML = '';
-		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
-		inst_marker.setMap(ref_instMap.current);
-		// 타입, 줌인스턴스가 담긴 참조객체를 반복돌며 addControl 메서드 호출
+		[setTraffic, setRoadview].forEach(func => func(false));
 		[ref_instType.current, ref_instZoom.current].forEach(inst => ref_instMap.current.addControl(inst));
+
+		//맵, 마커, 로드뷰, 로드뷰 인스턴스 생성후 미리 생성한 참조객체에 옮겨담음
+		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
+		ref_instMarker.current.setMap(ref_instMap.current);
 		ref_instView.current = new kakao.maps.Roadview(ref_viewFrame.current);
+
+		//로드뷰 인스턴스에 panoId연결해 실제 로드뷰화면 출력하는 호출문
 		ref_instClient.current.getNearestPanoId(latlng, 50, panoId => ref_instView.current.setPanoId(panoId, latlng));
 
+		//윈도우 전역 객체에 resize 이벤트 핸들러 연결 및 제거
 		window.addEventListener('resize', initPos);
 		return () => window.removeEventListener('resize', initPos);
 	}, [Index]);
 
+	//Traffic 값이 반전될때마다 트레픽 레이어 토글
 	useEffect(() => {
 		Traffic
 			? ref_instMap.current.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
@@ -74,11 +85,13 @@ export default function Map() {
 		<section className='map'>
 			<h2>Location</h2>
 
+			{/* 맵, 로드뷰 프레임 */}
 			<figure className='mapFrame'>
 				<article ref={ref_mapFrame} className={`mapFrame ${!Roadview && 'on'}`}></article>
 				<article ref={ref_viewFrame} className={`viewFrame ${Roadview && 'on'}`}></article>
 			</figure>
 
+			{/* 컨트롤 버튼 모음 */}
 			<nav className='btnSet'>
 				<ul className='branch'>
 					{ref_info.current.map((el, idx) => (
