@@ -18,17 +18,13 @@ export default function YoutubeDetail() {
 			.then(json => {
 				setYoutubeVid(json.items[0]);
 			});
-	}, []);
+	}, [id]);
 
 	return (
 		<Layout title={YoutubeVid?.snippet.title}>
 			<Content delay={1}>
 				<figure className='vidFrame'>
-					<iframe
-						width='100%'
-						height='100%'
-						title='youtube'
-						src={`https://www.youtube.com/embed/${YoutubeVid?.snippet.resourceId.videoId}`}></iframe>
+					<iframe width='100%' height='100%' title='youtube' src={`https://www.youtube.com/embed/${YoutubeVid?.snippet.resourceId.videoId}`}></iframe>
 				</figure>
 
 				<p>{YoutubeVid?.snippet.description}</p>
