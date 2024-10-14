@@ -3,6 +3,7 @@ import App from './App.jsx';
 import './styles/index.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 //쿼리키 : 리액트가 서버데이터 fetching시 데이터의 구분을 하기위한 고유의 인식표
 //리액트는 해당 쿼리키를 통해 서버데이터의 차이점을 구분
@@ -15,5 +16,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 		<BrowserRouter>
 			<App />
 		</BrowserRouter>
+
+		{/* 리액트쿼리가 관리하는 서버데이터의 상태확인을 전용 개발툴 */}
+		<ReactQueryDevtools />
 	</QueryClientProvider>
 );
