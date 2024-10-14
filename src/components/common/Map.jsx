@@ -41,14 +41,6 @@ export default function Map() {
 	const ref_instMarker = useRef(null);
 	const ref_instView = useRef(null);
 
-	const initPos = useCallback(() => {
-		console.log('initPos');
-		ref_instMap.current.setCenter(latlng);
-	}, [latlng]);
-
-	//useThrottle커스텀훅을 통해서 throttle이 적용된 새로운 throttledInitPos라는 함수 반환받음
-	const throttledInitPos = useThrottle(initPos);
-
 	const createMap = useCallback(() => {
 		ref_mapFrame.current.innerHTML = '';
 		ref_instMap.current = new kakao.maps.Map(ref_mapFrame.current, { center: latlng });
@@ -61,9 +53,16 @@ export default function Map() {
 		ref_instClient.current.getNearestPanoId(latlng, 50, panoId => ref_instView.current.setPanoId(panoId, latlng));
 	}, [kakao, latlng, markerImg, markerSize, markerPos]);
 
+	const initPos = useCallback(() => {
+		console.log('initPos');
+		ref_instMap.current.setCenter(latlng);
+	}, [latlng]);
+
+	//useThrottle커스텀훅을 통해서 throttle이 적용된 새로운 throttledInitPos라는 함수 반환받음
+	const throttledInitPos = useThrottle(initPos);
+
 	useEffect(() => {
 		createMap();
-
 		//throttle이 적용된 핸들러함수를 resize이벤트에 연결 및 제거
 		window.addEventListener('resize', throttledInitPos);
 		return () => window.removeEventListener('resize', throttledInitPos);
@@ -105,9 +104,8 @@ export default function Map() {
 		</section>
 	);
 }
-
 /*
-	throttle 
+	throttle (11시 20분까지 throttle개념 및 적용 방법 정리)
 	- throttle의 개념 : 물리적으로 일정시간동안의 함수 호출을 줄여서 성능개선
 	- throttle 사용하는 주된 경우 : 단기간에 이벤트가 많이 발생하는 resize, scroll, mousemove등에 연결되는 핸들러함수를 throttle처리
 	- throttle은 이벤트의 발생자체를 줄이는 것이 아닌, 이벤트에 연결되어 있는 핸들러함수의 호출자체를 줄임
