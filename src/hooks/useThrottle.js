@@ -22,5 +22,8 @@ export default function useThrottle(func, interval = 300) {
   전달된 원본함수에 기능을 확장해서 새로운 함수를 반환처리 (고차함수: HOF High Order Function)
 
   useThrottle로직 최종 정리
-  - 처음 setTimeout이 한번 실행 즉시 반환값을 timer에 담음
+  - 처음 setTimeout이 한번 실행 즉시 반환값을 timer에 담음 
+  - 반복되는 setTimeout요청이 들어와도 상단에 있는 if문에 의해서 무시됨 (아직 timer에 반환값이 담겨있기 때문)
+  - interval이후에 callback실행됨과 동시에 timer값을 물리적으로 제거 (비로서 새로운 setTimeout요청 수행가능)
+  - 결국 이벤트가 1초에 60번씩 빈번하게 발생하더라도 interval에 지정된 0.3초 간격마다 함수호출을 제한가능
 */
