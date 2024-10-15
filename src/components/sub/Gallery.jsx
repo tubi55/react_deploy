@@ -6,7 +6,10 @@ import Content from '../common/Content';
 import { useFlickrQuery } from '../../hooks/useFlickr';
 
 export default function Gallery() {
-	useFlickrQuery({ type: 'mine' });
+	//순서1- 갤러리 컴포넌트에 커스텀훅 호출시 전달해야되는 옵션 객체를 인수로 전달
+	const { data } = useFlickrQuery({ type: 'mine' });
+	console.log(data); //리액트쿼리훅이 데이터를 잘 반환하는지 확인
+
 	const ref_gallery = useRef(null);
 	const [Flickr, setFlickr] = useState([]);
 	const [ModalOpen, setModalOpen] = useState(false);
