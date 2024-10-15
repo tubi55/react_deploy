@@ -3,8 +3,10 @@ import Layout from '../common/Layout';
 import Pic from '../common/Pic';
 import Modal from '../common/Modal';
 import Content from '../common/Content';
+import { useFlickrQuery } from '../../hooks/useFlickr';
 
 export default function Gallery() {
+	useFlickrQuery({ type: 'mine' });
 	const ref_gallery = useRef(null);
 	const [Flickr, setFlickr] = useState([]);
 	const [ModalOpen, setModalOpen] = useState(false);
