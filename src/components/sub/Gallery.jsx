@@ -36,7 +36,7 @@ export default function Gallery() {
 	};
 
 	useEffect(() => {
-		fetchFlickr({ type: 'interest' });
+		fetchFlickr({ type: 'mine' });
 	}, []);
 
 	useEffect(() => {
@@ -47,6 +47,10 @@ export default function Gallery() {
 		<>
 			<Layout title={'GALLERY'}>
 				<Content delay={1.5} customMotion={customMotion}>
+					<ul className='type'>
+						<li>My Gallery</li>
+						<li>Interest Gallery</li>
+					</ul>
 					<section className='galleryList'>
 						{Flickr.map((data, idx) => {
 							return (
