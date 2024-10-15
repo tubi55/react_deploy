@@ -17,7 +17,6 @@ export default function Gallery() {
 		end: { opacity: 0, x: -200 }
 	};
 
-	//순서4 - {type:'search', tag:'바다'}라는 객체 상태값이 opt로 전달됨
 	const fetchFlickr = async opt => {
 		const baseURL = 'https://www.flickr.com/services/rest/';
 		const method_mine = 'flickr.people.getPhotos';
@@ -30,12 +29,10 @@ export default function Gallery() {
 		let url = '';
 		const urlMine = `${baseURL}?method=${method_mine}&api_key=${flickr_api}&user_id=${myID}&per_page=${num}&nojsoncallback=1&format=json`;
 		const urlInterest = `${baseURL}?method=${method_interest}&api_key=${flickr_api}&per_page=${num}&nojsoncallback=1&format=json`;
-		//검색전용 url값 추가
 		const urlSearch = `${baseURL}?method=${method_search}&api_key=${flickr_api}&per_page=${num}&nojsoncallback=1&format=json&tags=${opt.tag}`;
 
 		opt.type === 'mine' && (url = urlMine);
 		opt.type === 'interest' && (url = urlInterest);
-		//순서5: 전달된 opt값의 type이 search이므로 위에서 준비한 검색 전용 호출 url을 아래쪽 fetch함수에 전달에서 검색 데이터 요청
 		opt.type === 'search' && (url = urlSearch);
 
 		const data = await fetch(url);
@@ -43,13 +40,15 @@ export default function Gallery() {
 		setFlickr(json.photos.photo);
 	};
 
-	//순서2 - 기본전송기능을 막으면서 {type:'search', tag:'바다'}라는 객체값으로 Type상태값 변경처리
 	const handleSearch = e => {
 		e.preventDefault();
-		setType({ type: 'search', tag: '바다' });
+		//폼에서 전송 이벤트 발생시 이벤트발생한 form(e.target)의 첫번재 자식 요소인 input요소의 value값을 구해서
+		//tag라는 프로퍼티에 담아서 Type 상태값 변경
+		//해당 값은 자동적으로 fetch함수안쪽의 검색요청 url의 쿼리값으로 등록됨
+		console.dir(e.target[0].value);
+		setType({ type: 'search', tag: e.target[0].value });
 	};
 
-	//순서3 - Type상태값 변경되면서 Type값은 내부의 fetchFlickr함수의 인수로 전달됨
 	useEffect(() => {
 		fetchFlickr(Type);
 		ref_gallery.current.classList.remove('on');
@@ -77,7 +76,6 @@ export default function Gallery() {
 							</li>
 						</ul>
 
-						{/* 순서1- form안쪽의 button을 클릭하고 input에서 엔터치면 자동으로 wrapping요소인 form에 submit이벤트 발생됨 handleSearch호출 */}
 						<form onSubmit={handleSearch}>
 							<input type='text' placeholder='검색어를 입력하세요.' />
 							<button>search</button>
