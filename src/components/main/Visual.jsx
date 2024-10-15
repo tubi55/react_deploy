@@ -1,8 +1,8 @@
 import { useFlickrQuery } from '../../hooks/useFlickr';
 import Pic from '../common/Pic';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import 'swiper/css';
 
 export default function Visual() {
