@@ -12,7 +12,16 @@
 			position: absolute;
 			top: 0px;
 			left: 0px;
-			font-size: 3vmax;
+			opacity: 0;
+			transform: scale(2);
+			font: 100 5vmax/1 'raleway';
+			color: #333;
+			transition: 0.5s;
+
+			&.on {
+				opacity: 1;
+				transform: scale(1);
+			}
 		}
 	}
 
