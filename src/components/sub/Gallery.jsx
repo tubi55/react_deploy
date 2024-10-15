@@ -9,9 +9,7 @@ export default function Gallery() {
 	const ref_gallery = useRef(null);
 	const [ModalOpen, setModalOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
-	//순서1: {type:'mine'}값으로 Type 상태값 초기화
 	const [Type, setType] = useState({ type: 'mine' });
-	//처음 마운트기 위쪽의 상태값으로 data fetching및 반환
 	const { data: Flickr } = useFlickrQuery(Type);
 
 	const customMotion = {
@@ -22,8 +20,9 @@ export default function Gallery() {
 
 	const handleSearch = e => {
 		e.preventDefault();
-
+		if (!e.target[0].value.trim()) return alert('검색어를 입력해주세요.');
 		setType({ type: 'search', tag: e.target[0].value });
+		e.target[0].value = '';
 	};
 
 	useEffect(() => {
