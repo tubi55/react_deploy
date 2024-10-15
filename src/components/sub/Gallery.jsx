@@ -43,10 +43,11 @@ export default function Gallery() {
 				<Content delay={1.5} customMotion={customMotion}>
 					<article className='controller'>
 						<ul className='type'>
-							<li onClick={() => setType({ type: 'mine' })} className={Type.type === 'mine' && 'on'}>
+							{/* className을 조건처리할때는 &&연산자 사용불가 : className에는 boolean이 아닌 문자값이 와야됨 */}
+							<li onClick={() => setType({ type: 'mine' })} className={Type.type === 'mine' ? 'on' : ''}>
 								My Gallery
 							</li>
-							<li onClick={() => setType({ type: 'interest' })} className={Type.type === 'interest' && 'on'}>
+							<li onClick={() => setType({ type: 'interest' })} className={Type.type === 'interest' ? 'on' : ''}>
 								Interest Gallery
 							</li>
 						</ul>
@@ -58,6 +59,8 @@ export default function Gallery() {
 					</article>
 
 					<section className='galleryList' ref={ref_gallery}>
+						{/* Flickr값이 있을떄 해당 배열값의 갯수가 0이면 검색결과과 없으므로 안내문구 출력 */}
+						{Flickr?.length === 0 && <p>해당 검색어의 검색 결과가 없습니다.</p>}
 						{Flickr?.map((data, idx) => {
 							return (
 								<article
