@@ -75,4 +75,11 @@
 			}
 		}
 	}
+
+	.btnStart {
+		position: absolute;
+		bottom: 10vh;
+		left: 10vw;
+		z-index: 4;
+	}
 }
