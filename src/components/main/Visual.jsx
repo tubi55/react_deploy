@@ -5,7 +5,9 @@ import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { useState } from 'react';
 import 'swiper/css';
+import 'swiper/css/virtual';
 import { FaPlay } from 'react-icons/fa';
+import { Virtual } from 'swiper/modules';
 
 function BtnStart() {
 	const swiper = useSwiper();
@@ -33,7 +35,8 @@ export default function Visual() {
 			</div>
 
 			<Swiper
-				modules={[Autoplay, Pagination]}
+				modules={[Autoplay, Pagination, Virtual]}
+				virtual
 				pagination={{ type: 'fraction' }}
 				slidesPerView={1}
 				spaceBetween={0}
@@ -57,7 +60,7 @@ export default function Visual() {
 					data.map((pic, idx) => {
 						if (idx >= 10) return null;
 						return (
-							<SwiperSlide key={idx}>
+							<SwiperSlide key={pic} virtualIndex={idx}>
 								<div className='inner'>
 									<Pic src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`} style={{ width: '100%', height: '100%' }} shadow />
 								</div>

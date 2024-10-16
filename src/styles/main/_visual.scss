@@ -30,6 +30,7 @@
 		height: 100%;
 		position: relative;
 		left: 200px;
+		z-index: 5;
 
 		.swiper-wrapper {
 			width: 100%;
@@ -80,7 +81,7 @@
 		position: absolute;
 		bottom: 5vh;
 		right: 30vw;
-		z-index: 3;
+		z-index: 11;
 		border: none;
 		background: transparent;
 		font-size: 1.4rem;
