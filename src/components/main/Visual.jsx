@@ -35,9 +35,19 @@ export default function Visual() {
 			<Swiper
 				modules={[Autoplay, Pagination]}
 				pagination={{ type: 'fraction' }}
-				slidesPerView={3}
-				spaceBetween={100}
+				slidesPerView={1}
+				spaceBetween={0}
 				loop={true}
+				breakpoints={{
+					1000: {
+						slidesPerView: 2,
+						spaceBetween: 50
+					},
+					1400: {
+						slidesPerView: 3,
+						spaceBetween: 50
+					}
+				}}
 				centeredSlides={true}
 				onSlideChange={el => setIndex(el.realIndex)}
 				autoplay={{ delay: 2000, disableOnInteraction: true }}
