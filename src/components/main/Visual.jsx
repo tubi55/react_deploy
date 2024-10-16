@@ -1,13 +1,14 @@
 import { useFlickrQuery } from '../../hooks/useFlickr';
 import Pic from '../common/Pic';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-//Autoplay 모듈 가져옴
 import { Autoplay, Pagination } from 'swiper/modules';
 import { useState } from 'react';
-import 'swiper/css';
-import 'swiper/css/virtual';
 import { FaPlay } from 'react-icons/fa';
+//Virtual 모듈 가져옴
 import { Virtual } from 'swiper/modules';
+import 'swiper/css';
+//virtual css 가져옴
+import 'swiper/css/virtual';
 
 function BtnStart() {
 	const swiper = useSwiper();
@@ -35,6 +36,7 @@ export default function Visual() {
 			</div>
 
 			<Swiper
+				//Virtual 모듈 연결 (동적 요소 Slide 추가시에는 Virtaul 설정 추가해야함)
 				modules={[Autoplay, Pagination, Virtual]}
 				virtual
 				pagination={{ type: 'fraction' }}
@@ -60,6 +62,7 @@ export default function Visual() {
 					data.map((pic, idx) => {
 						if (idx >= 10) return null;
 						return (
+							//virtualIndex 추가 지정
 							<SwiperSlide key={pic} virtualIndex={idx}>
 								<div className='inner'>
 									<Pic src={`https://live.staticflickr.com/${pic.server}/${pic.id}_${pic.secret}_b.jpg`} style={{ width: '100%', height: '100%' }} shadow />
