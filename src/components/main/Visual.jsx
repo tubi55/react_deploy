@@ -2,19 +2,15 @@ import { useFlickrQuery } from '../../hooks/useFlickr';
 import Pic from '../common/Pic';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 //Autoplay 모듈 가져옴
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import { useState } from 'react';
 import 'swiper/css';
 import { FaPlay } from 'react-icons/fa';
 
-//Swiper 컴포넌트 안쪽에서 호출할 자동롤링 시작 버튼 컴포넌트
 function BtnStart() {
-	//스와이퍼 전용 autoplay관련 메서드를 호출하기 위해서 useSwiper커스텀 훅으로 swiper 인스턴스 생성
 	const swiper = useSwiper();
-	console.log(swiper);
 
 	return (
-		//hidden(true: 숨김, false:보임), disabled(true:기능비활성화, false:기능활성화)
 		<button hidden={swiper.autoplay.running} className='btnStart' onClick={() => swiper.autoplay.start()}>
 			<FaPlay />
 		</button>
@@ -37,7 +33,8 @@ export default function Visual() {
 			</div>
 
 			<Swiper
-				modules={[Autoplay]}
+				modules={[Autoplay, Pagination]}
+				pagination={{ type: 'fraction' }}
 				slidesPerView={3}
 				spaceBetween={100}
 				loop={true}
