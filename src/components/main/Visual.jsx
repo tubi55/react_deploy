@@ -14,7 +14,12 @@ function BtnStart() {
 	const swiper = useSwiper();
 
 	return (
-		<button hidden={swiper.autoplay.running} className='btnStart' onClick={() => swiper.autoplay.start()}>
+		<button
+			hidden={swiper.autoplay.running}
+			className='btnStart'
+			onClick={() => {
+				swiper.autoplay.start();
+			}}>
 			<FaPlay />
 		</button>
 	);
@@ -56,7 +61,12 @@ export default function Visual() {
 				centeredSlides={true}
 				onSlideChange={el => setIndex(el.realIndex)}
 				autoplay={{ delay: 2000, disableOnInteraction: true }}
-				onSwiper={swiper => setTimeout(() => swiper.autoplay.start(), 1000)}>
+				onSwiper={swiper => {
+					setTimeout(() => {
+						swiper.slideNext();
+						swiper.autoplay.start();
+					}, 1000);
+				}}>
 				{/* 데이터배열을 통해 동적생성되고 있는 Slide 컴포넌트 */}
 				{isSuccess &&
 					data.map((pic, idx) => {
