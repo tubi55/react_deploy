@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import useThrottle from '../../hooks/useThrottle';
 
 export default function MobileMenu() {
+	console.log('MobileMenu');
 	const { dispatch } = useGlobalState();
 
 	const { initial, animate, exit, transition } = {
