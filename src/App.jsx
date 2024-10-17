@@ -10,8 +10,10 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import YoutubeDetail from './components/sub/YoutubeDetail';
 import { AnimatePresence } from 'framer-motion';
 import MobileMenu from './components/common/MobileMenu';
+import { useGlobalState } from './hooks/useGlobal';
 
 export default function App() {
+	const { MobileOpen } = useGlobalState();
 	const location = useLocation();
 	return (
 		<>
@@ -29,7 +31,7 @@ export default function App() {
 				</Routes>
 			</AnimatePresence>
 
-			<MobileMenu />
+			{MobileOpen && <MobileMenu />}
 
 			<Footer />
 		</>
