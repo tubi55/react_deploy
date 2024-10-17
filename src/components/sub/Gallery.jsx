@@ -7,8 +7,10 @@ import { useFlickrQuery } from '../../hooks/useFlickr';
 import { useGlobalState } from '../../hooks/useGlobal';
 
 export default function Gallery() {
-	//순서1 - 커스텀훅을 통해 전역관리되는 상태값인 ModalOpen, setModlOpen 가져옴
-	const { ModalOpen, setModalOpen } = useGlobalState();
+	console.log('gallery');
+
+	const { store, dispatch } = useGlobalState();
+
 	const ref_gallery = useRef(null);
 	const [Index, setIndex] = useState(0);
 	const [Type, setType] = useState({ type: 'mine' });
@@ -36,8 +38,8 @@ export default function Gallery() {
 	}, [Type]);
 
 	useEffect(() => {
-		document.body.style.overflow = ModalOpen ? 'hidden' : 'auto';
-	}, [ModalOpen]);
+		document.body.style.overflow = store.isModal ? 'hidden' : 'auto';
+	}, [store.isModal]);
 
 	return (
 		<>
@@ -64,11 +66,10 @@ export default function Gallery() {
 						{Flickr?.length === 0 && <p>해당 검색어의 검색 결과가 없습니다.</p>}
 						{Flickr?.map((data, idx) => {
 							return (
-								//순서2-각 article요소에 전역에서 가져온 setModalOpen상태변경함수 호출
 								<article
 									key={idx}
 									onClick={() => {
-										setModalOpen(true);
+										dispatch({ type: 'OPEN_MODAL' });
 										setIndex(idx);
 									}}>
 									<Pic src={`https://live.staticflickr.com/${data.server}/${data.id}_${data.secret}_z.jpg`} className='pic' shadow />
@@ -80,8 +81,7 @@ export default function Gallery() {
 				</Content>
 			</Layout>
 
-			{/* 순서3- 상태변경함수를 통해서 ModalOpen 전역상태값 변경시 Modal 컴포넌트 마운트 */}
-			{ModalOpen && (
+			{store.isModal && (
 				<Modal>
 					<Pic src={`https://live.staticflickr.com/${Flickr[Index].server}/${Flickr[Index].id}_${Flickr[Index].secret}_b.jpg`} shadow />
 				</Modal>
