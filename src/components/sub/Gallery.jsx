@@ -4,11 +4,11 @@ import Pic from '../common/Pic';
 import Modal from '../common/Modal';
 import Content from '../common/Content';
 import { useFlickrQuery } from '../../hooks/useFlickr';
-import { useGlobalData } from '../../hooks/useGlobalContext';
+import { useGlobalState } from '../../hooks/useGlobal';
 
 export default function Gallery() {
-	const globalState = useGlobalData();
-	console.log(globalState);
+	const abc = useGlobalState();
+	console.log(abc);
 	const ref_gallery = useRef(null);
 	const [ModalOpen, setModalOpen] = useState(false);
 	const [Index, setIndex] = useState(0);
