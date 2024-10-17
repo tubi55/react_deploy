@@ -7,6 +7,7 @@ import { useFlickrQuery } from '../../hooks/useFlickr';
 import { useGlobalState } from '../../hooks/useGlobal';
 
 export default function Gallery() {
+	//순서1 - 커스텀훅을 통해 전역관리되는 상태값인 ModalOpen, setModlOpen 가져옴
 	const { ModalOpen, setModalOpen } = useGlobalState();
 	const ref_gallery = useRef(null);
 	const [Index, setIndex] = useState(0);
@@ -60,10 +61,10 @@ export default function Gallery() {
 					</article>
 
 					<section className='galleryList' ref={ref_gallery}>
-						{/* Flickr값이 있을떄 해당 배열값의 갯수가 0이면 검색결과가 없으므로 안내문구 출력 */}
 						{Flickr?.length === 0 && <p>해당 검색어의 검색 결과가 없습니다.</p>}
 						{Flickr?.map((data, idx) => {
 							return (
+								//순서2-각 article요소에 전역에서 가져온 setModalOpen상태변경함수 호출
 								<article
 									key={idx}
 									onClick={() => {
@@ -79,6 +80,7 @@ export default function Gallery() {
 				</Content>
 			</Layout>
 
+			{/* 순서3- 상태변경함수를 통해서 ModalOpen 전역상태값 변경시 Modal 컴포넌트 마운트 */}
 			{ModalOpen && (
 				<Modal>
 					<Pic src={`https://live.staticflickr.com/${Flickr[Index].server}/${Flickr[Index].id}_${Flickr[Index].secret}_b.jpg`} shadow />
