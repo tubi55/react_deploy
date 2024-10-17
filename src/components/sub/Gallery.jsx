@@ -7,8 +7,6 @@ import { useFlickrQuery } from '../../hooks/useFlickr';
 import { useGlobalState } from '../../hooks/useGlobal';
 
 export default function Gallery() {
-	console.log('gallery');
-
 	const { store, dispatch } = useGlobalState();
 
 	const ref_gallery = useRef(null);
