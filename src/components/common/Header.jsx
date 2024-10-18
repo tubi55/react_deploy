@@ -1,10 +1,10 @@
 import { FaBars, FaEnvelope, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import { useZunstandStore } from '../../hooks/useZustand';
+import { useZustandStore } from '../../hooks/useZustand';
 
 export default function Header() {
 	console.log('header');
-	const { setMenuToggle } = useZunstandStore();
+	const { setMenuToggle } = useZustandStore();
 
 	const gnbArr = ['members', 'gallery', 'youtube', 'contact', 'posts'];
 	const snsArr = [FaEnvelope, FaInstagram, FaYoutube];

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import useThrottle from '../../hooks/useThrottle';
-import { useZunstandStore } from '../../hooks/useZustand';
+import { useZustandStore } from '../../hooks/useZustand';
 
 export default function MobileMenu() {
 	console.log('mobileMenu');
-	const { setMenuClose } = useZunstandStore();
+	const { setMenuClose } = useZustandStore();
 
 	const { initial, animate, exit, transition } = {
 		initial: { x: -300, opacity: 0 },

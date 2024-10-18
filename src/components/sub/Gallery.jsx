@@ -4,13 +4,13 @@ import Pic from '../common/Pic';
 import Modal from '../common/Modal';
 import Content from '../common/Content';
 import { useFlickrQuery } from '../../hooks/useFlickr';
-import { useGlobalDispatch, useGlobalState, ACTIONS } from '../../hooks/useGlobal';
 import { AnimatePresence } from 'framer-motion';
+import { useZustandStore } from '../../hooks/useZustand';
 
 export default function Gallery() {
 	console.log('gallery');
-	const { store } = useGlobalState();
-	const { dispatch } = useGlobalDispatch();
+
+	const { IsModal, setModalOpen } = useZustandStore();
 
 	const ref_gallery = useRef(null);
 	const [Index, setIndex] = useState(0);
@@ -39,8 +39,8 @@ export default function Gallery() {
 	}, [Type]);
 
 	useEffect(() => {
-		document.body.style.overflow = store.isModal ? 'hidden' : 'auto';
-	}, [store.isModal]);
+		document.body.style.overflow = IsModal ? 'hidden' : 'auto';
+	}, [IsModal]);
 
 	return (
 		<>
@@ -48,7 +48,6 @@ export default function Gallery() {
 				<Content delay={1.5} customMotion={customMotion}>
 					<article className='controller'>
 						<ul className='type'>
-							{/* className을 조건처리할때는 &&연산자 사용불가 : className에는 boolean이 아닌 문자값이 와야됨 */}
 							<li onClick={() => setType({ type: 'mine' })} className={Type.type === 'mine' ? 'on' : ''}>
 								My Gallery
 							</li>
@@ -70,11 +69,10 @@ export default function Gallery() {
 								<article
 									key={idx}
 									onClick={() => {
-										dispatch({ type: ACTIONS.SET_MODAL_OPEN });
+										setModalOpen();
 										setIndex(idx);
 									}}>
 									<Pic src={`https://live.staticflickr.com/${data.server}/${data.id}_${data.secret}_z.jpg`} className='pic' shadow />
-									{/* <h3>{data.title}</h3> */}
 								</article>
 							);
 						})}
@@ -83,7 +81,7 @@ export default function Gallery() {
 			</Layout>
 
 			<AnimatePresence>
-				{store.isModal && (
+				{IsModal && (
 					<Modal>
 						<Pic src={`https://live.staticflickr.com/${Flickr[Index].server}/${Flickr[Index].id}_${Flickr[Index].secret}_b.jpg`} shadow />
 					</Modal>

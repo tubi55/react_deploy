@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export const useZunstandStore = create(set => ({
+export const useZustandStore = create(set => ({
 	IsModal: false,
 	IsMenu: false,
 	setModalOpen: () => set({ IsModal: true }),
