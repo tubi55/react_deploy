@@ -44,9 +44,9 @@
 			li {
 				display: inline-block;
 				padding: 10px 20px;
-				background: #333;
+				background: rgba(var(--keyRGB), 0.8);
 				border-radius: 3px;
-				box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+				box-shadow: 5px 5px 10px rgba(var(--keyRGB), 0.05);
 				font: 500 0.6rem/1 'orbitron';
 				color: #fff;
 				cursor: pointer;

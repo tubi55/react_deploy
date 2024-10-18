@@ -4,7 +4,25 @@ $tablet: 999px;
 $mobile: 599px;
 
 :root {
-	--keyColor: royalblue;
+	--keyRGB: 40, 40, 40;
+}
+//rgba(var(--keyRGB), 0.5);
+//rgba(40,40,40,0.5);
+
+//black: 40,40,40
+//hotpink: 184, 0, 190;
+//blue: 0, 120, 150;
+
+//scss파일 없이 동적으로 제어되는 스타일을 css변수로 제어가 필요할때 클래스명 부여후 !import로 우선순위 높여줌
+.mask {
+	background-color: rgba(var(--keyRGB), 1) !important;
+}
+.maskText {
+	color: rgba(var(--keyRGB), 0.8) !important;
+}
+
+.test {
+	background: rgb(0, 120, 150);
 }
 
 //common
