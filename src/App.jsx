@@ -13,6 +13,7 @@ import MobileMenu from './components/common/MobileMenu';
 import { useZustandStore } from './hooks/useZustand';
 
 export default function App() {
+	console.log('app');
 	const location = useLocation();
 	const { IsMenu } = useZustandStore();
 
