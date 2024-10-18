@@ -3,7 +3,7 @@ import { useZustandStore } from '../../hooks/useZustand';
 
 export default function Modal({ children }) {
 	console.log('modal');
-	const { setModalClose } = useZustandStore();
+	const setModalClose = useZustandStore(state => state.setModalClose);
 
 	return (
 		<motion.aside className='modal'>

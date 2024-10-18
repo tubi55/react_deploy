@@ -15,7 +15,8 @@ import { useZustandStore } from './hooks/useZustand';
 export default function App() {
 	console.log('app');
 	const location = useLocation();
-	const { IsMenu } = useZustandStore();
+	//루트 컴포넌트인 App에서 유일하게 사용되는 IsMenu 전역 상태값을 선택적 상태 구독처리
+	const IsMenu = useZustandStore(state => state.IsMenu);
 
 	return (
 		<>
