@@ -4,7 +4,6 @@ import useThrottle from '../../hooks/useThrottle';
 import { useZustandStore } from '../../hooks/useZustand';
 
 export default function MobileMenu() {
-	console.log('mobileMenu');
 	const setMenuClose = useZustandStore(state => state.setMenuClose);
 
 	const { initial, animate, exit, transition } = {
@@ -15,7 +14,6 @@ export default function MobileMenu() {
 	};
 
 	const closeMenu = () => {
-		console.log('closeMenu');
 		if (window.innerWidth >= 1000) setMenuClose();
 	};
 
