@@ -2,6 +2,11 @@ import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import useThrottle from '../../hooks/useThrottle';
 import { useZustandStore } from '../../hooks/useZustand';
+import { Link } from 'react-router-dom';
+import { FaUserGroup } from 'react-icons/fa6';
+import { FaImages, FaYoutube } from 'react-icons/fa';
+import { RiCustomerService2Fill } from 'react-icons/ri';
+import { IoDocumentText } from 'react-icons/io5';
 
 export default function MobileMenu() {
 	const setMenuClose = useZustandStore(state => state.setMenuClose);
@@ -26,7 +31,42 @@ export default function MobileMenu() {
 
 	return (
 		<motion.aside className='mobileMenu' onClick={setMenuClose} initial={initial} animate={animate} exit={exit} transition={transition}>
-			MobileMenu
+			<h1>
+				<Link to='/'>ALPACO</Link>
+			</h1>
+
+			<ul>
+				<li>
+					<Link to='/members'>
+						<FaUserGroup />
+						MEMBERS
+					</Link>
+				</li>
+				<li>
+					<Link to='/gallery'>
+						<FaImages />
+						GALLERY
+					</Link>
+				</li>
+				<li>
+					<Link to='/youtubue'>
+						<FaYoutube />
+						YOUTUBE
+					</Link>
+				</li>
+				<li>
+					<Link to='/contact'>
+						<RiCustomerService2Fill />
+						CONTACT
+					</Link>
+				</li>
+				<li>
+					<Link to='/posts'>
+						<IoDocumentText />
+						POSTS
+					</Link>
+				</li>
+			</ul>
 		</motion.aside>
 	);
 }
