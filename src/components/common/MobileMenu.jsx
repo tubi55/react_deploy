@@ -49,7 +49,7 @@ export default function MobileMenu() {
 					</Link>
 				</li>
 				<li>
-					<Link to='/youtubue'>
+					<Link to='/youtube'>
 						<FaYoutube />
 						YOUTUBE
 					</Link>
